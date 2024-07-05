@@ -1,10 +1,14 @@
 import { NS } from "@ns";
 
-export function readJsonFile(ns: NS, path: string) {
-  return JSON.parse(ns.read(path));
+export function readJsonFile<T>(ns: NS, path: string): T | null {
+  const contents = ns.read(path);
+  if (contents === "") {
+    return null;
+  }
+  return JSON.parse(contents);
 }
 
-export function writeJsonFile(ns: NS, path: string, data: any) {
+export function writeJsonFile<T>(ns: NS, path: string, data: T) {
   ns.write(path, JSON.stringify(data, null, 2), "w");
 }
 
