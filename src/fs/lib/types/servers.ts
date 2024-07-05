@@ -1,6 +1,6 @@
-import { Server } from "@ns";
+import { Server, ScriptArg } from "@ns";
 
-export type IndexableServer = Required<Server> & Record<string, any>;
+export type IndexableServer = Required<Server> & Record<string, ScriptArg>;
 
 export type WorkerServer = IndexableServer & {
   availableRam: number;
