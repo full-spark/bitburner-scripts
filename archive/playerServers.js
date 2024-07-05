@@ -57,7 +57,7 @@ const settings = {
     if (hostname !== 'home') {
       throw new Error('Run the script from home')
     }
-  
+    
     while (true) {
       let didChange = false
   

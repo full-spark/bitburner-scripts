@@ -8,7 +8,10 @@
     "watch:remote": "bitburner-filesync",
     "watch:init": "node build/init.js",
     "watch:all": "concurrently npm:watch:transpile npm:watch:local npm:watch:remote",
-    "watch": "npm run watch:init && npm run watch:all"
+    "watch": "npm run watch:init && npm run watch:all",
+    "lint:src": "eslint src/fs",
+    "lint:dev": "eslint src/dev",
+    "lint:all": "eslint ."
   },
   "templateAuthor": "hydroflame, Hoekstraa, based on work by SlyCedix",
   "author": "fullsparkdev",
