@@ -129,7 +129,7 @@ export function getThreads(ns: NS, target: string): Stages {
   // ============================
   // Formulaic Farm stage
 
-  if (!ns.fileExists("formulas.exe", "home")) {
+  if (!ns.fileExists("Formulas.exe", "home")) {
     return stages;
   }
 
