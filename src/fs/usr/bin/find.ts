@@ -1,4 +1,4 @@
-import { AutocompleteData, NS, ScriptArg } from "@ns";
+import { AutocompleteData, NS } from "@ns";
 import { getServerMap } from "/fs/lib/servers";
 import { colored } from "/fs/lib/util/print";
 
@@ -12,7 +12,9 @@ export function findServerConnect(ns: NS, name?: string): void {
     ns.tprint(colored("yellow", `Cannot locate server '${name}'.`));
     return;
   }
-  const servers = name ? [name] : ["CSEC", "avmnite-02h", "I.I.I.I", "run4theh111z"];
+  const servers = name
+    ? [name]
+    : ["CSEC", "avmnite-02h", "I.I.I.I", "run4theh111z"];
   let output = "";
 
   function recurse(name: string): string {
@@ -34,6 +36,6 @@ export async function main(ns: NS) {
   ns.exit();
 }
 
-export function autocomplete(data: AutocompleteData, args: ScriptArg[]) {
+export function autocomplete(data: AutocompleteData) {
   return data.servers;
 }

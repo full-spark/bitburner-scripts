@@ -2,7 +2,7 @@ import { NS, Server } from "@ns";
 import { getServerFlatMap, unlockServer } from "/fs/lib/servers";
 import { analyzeTarget } from "fs/usr/lib/targets";
 import { measureLocks } from "/fs/sbin/lib/lock";
-import type { IndexableServer, TargetServer, WorkerServer } from "/fs/lib/types/servers";
+import type { TargetServer, WorkerServer } from "/fs/lib/types/servers";
 
 export function getServers(ns: NS) {
   return getServerFlatMap(ns, (server: string) => {
@@ -18,7 +18,11 @@ export function getWorkers(ns: NS, minRam: number = 4): WorkerServer[] {
     .filter((server) => server.hasAdminRights)
     .map((server) => {
       const reservedRam = measureLocks.byServer(ns, server.hostname);
-      return { ...server, availableRam: server.maxRam - reservedRam, locks: { reservedRam } };
+      return {
+        ...server,
+        availableRam: server.maxRam - reservedRam,
+        locks: { reservedRam },
+      };
     })
     .filter((server) => server.availableRam >= minRam) as WorkerServer[];
   return flatmap;

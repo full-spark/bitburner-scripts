@@ -9,6 +9,7 @@ export default tseslint.config(
   {
     rules: {
       "no-constant-condition": 0,
+      "no-control-regex": 0
     },
   }
 );

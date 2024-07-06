@@ -32,5 +32,26 @@ export type Threads = {
   hack: number;
   grow: number;
   weaken: number;
-  cost: number;
+};
+
+export type Stages = {
+  weaken: {
+    threads: Threads;
+    cost: number;
+  };
+  fluff: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
+  farm: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
+  formulaicFarm: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
 };
