@@ -1,6 +1,6 @@
-import { Server } from "@ns";
+import { Server, ScriptArg } from "@ns";
 
-export type IndexableServer = Required<Server> & Record<string, any>;
+export type IndexableServer = Required<Server> & Record<string, ScriptArg>;
 
 export type WorkerServer = IndexableServer & {
   availableRam: number;
@@ -32,5 +32,26 @@ export type Threads = {
   hack: number;
   grow: number;
   weaken: number;
-  cost: number;
+};
+
+export type Stages = {
+  weaken: {
+    threads: Threads;
+    cost: number;
+  };
+  fluff: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
+  farm: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
+  formulaicFarm: {
+    threads: Threads;
+    ratios: Threads;
+    cost: number;
+  };
 };

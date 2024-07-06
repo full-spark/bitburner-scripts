@@ -1,7 +1,11 @@
-import { AutocompleteData, ScriptArg } from "@ns";
+import { AutocompleteData, ScriptArg, NS } from "@ns";
 
 type AutocompleteRecord = {
-  [key: string]: AutocompleteRecord | ScriptArg | ScriptArg[] | Function;
+  [key: string]:
+    | AutocompleteRecord
+    | ScriptArg
+    | ScriptArg[]
+    | ((ns: NS) => void);
 };
 
 function parseArguments(
@@ -12,7 +16,7 @@ function parseArguments(
   return (function recurse(
     rtree: AutocompleteRecord,
     rargs: ScriptArg[]
-  ): string[] | Function | null {
+  ): string[] | ((ns: NS) => void) | null {
     if (typeof rtree === "function") {
       return type === "Function" ? rtree : [];
     }
@@ -27,7 +31,10 @@ function parseArguments(
   })(tree, args);
 }
 
-export function getAutocomplete(args: ScriptArg[], tree: AutocompleteRecord): string[] {
+export function getAutocomplete(
+  args: ScriptArg[],
+  tree: AutocompleteRecord
+): string[] {
   return parseArguments("Autocompletes", args, tree) as string[];
 }
 

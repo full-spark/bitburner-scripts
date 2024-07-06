@@ -12,7 +12,9 @@ export const calculateThreads = {
     const threads = {
       hack: 0,
       grow: 0,
-      weaken: Math.ceil((target.hackDifficulty - target.minDifficulty) / ns.weakenAnalyze(1)),
+      weaken: Math.ceil(
+        (target.hackDifficulty - target.minDifficulty) / ns.weakenAnalyze(1)
+      ),
     };
     return {
       ...threads,
@@ -20,8 +22,11 @@ export const calculateThreads = {
     };
   },
   fluff: (ns: NS, target: Required<Server>): Threads => {
-    const growthMultiplier = target.moneyMax / Math.max(target.moneyAvailable, 0.01);
-    const growThreads = Math.ceil(ns.growthAnalyze(target.hostname, growthMultiplier));
+    const growthMultiplier =
+      target.moneyMax / Math.max(target.moneyAvailable, 0.01);
+    const growThreads = Math.ceil(
+      ns.growthAnalyze(target.hostname, growthMultiplier)
+    );
     const growSecurity = ns.growthAnalyzeSecurity(growThreads); // <============= TODO: Move this to text file
     const weakenThreads = Math.ceil(growSecurity / ns.weakenAnalyze(1)); // <============= TODO: Move this to text file
     const threads = {
@@ -35,11 +40,17 @@ export const calculateThreads = {
     };
   },
   naiveFarm: (ns: NS, target: Required<Server>): Threads => {
-    const hackThreads = Math.floor(ns.hackAnalyzeThreads(target.hostname, target.moneyMax / 2));
+    const hackThreads = Math.floor(
+      ns.hackAnalyzeThreads(target.hostname, target.moneyMax / 2)
+    );
     const hackSecurity = ns.hackAnalyzeSecurity(hackThreads); // <============= TODO: Move this to text file
-    const growThreads = Math.ceil(ns.growthAnalyze(target.hostname, target.moneyMax / 2));
+    const growThreads = Math.ceil(
+      ns.growthAnalyze(target.hostname, target.moneyMax / 2)
+    );
     const growSecurity = ns.growthAnalyzeSecurity(growThreads);
-    const weakenThreads = Math.ceil((hackSecurity + growSecurity) / ns.weakenAnalyze(1));
+    const weakenThreads = Math.ceil(
+      (hackSecurity + growSecurity) / ns.weakenAnalyze(1)
+    );
     const threads = {
       hack: hackThreads,
       grow: growThreads,
@@ -51,8 +62,8 @@ export const calculateThreads = {
     };
   },
   formulaicFarm: (ns: NS, target: Required<Server>): Threads => {
-    // Check for formulas.exe
-    if (!ns.fileExists("formulas.exe", "home")) {
+    // Check for Formulas.exe
+    if (!ns.fileExists("Formulas.exe", "home")) {
       return { hack: -1, grow: -1, weaken: -1, cost: -1 };
     }
 
@@ -63,10 +74,16 @@ export const calculateThreads = {
     const actualHackPercent = hackThreads * hackPercent;
     const hackSecurity = ns.hackAnalyzeSecurity(hackThreads);
     const growThreads = Math.ceil(
-      ns.formulas.hacking.growThreads(mock, player, target.moneyMax * (1 - actualHackPercent))
+      ns.formulas.hacking.growThreads(
+        mock,
+        player,
+        target.moneyMax * (1 - actualHackPercent)
+      )
     );
     const growSecurity = ns.growthAnalyzeSecurity(growThreads);
-    const weakenThreads = Math.ceil((hackSecurity + growSecurity) / ns.weakenAnalyze(1));
+    const weakenThreads = Math.ceil(
+      (hackSecurity + growSecurity) / ns.weakenAnalyze(1)
+    );
     const threads = {
       hack: hackThreads,
       grow: growThreads,
@@ -92,7 +109,11 @@ export const getThreadCost = (ns: NS, threads: Partial<Threads>) => {
   );
 };
 
-export const batchThreads = (ns: NS, servers: Required<Server>[], threads: Threads) => {
+export const batchThreads = (
+  ns: NS,
+  servers: Required<Server>[],
+  threads: Threads
+) => {
   /**
    * Batch threads across multiple servers.
    * This function will distribute the threads across the servers in the most optimal way.

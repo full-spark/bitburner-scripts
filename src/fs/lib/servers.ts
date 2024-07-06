@@ -36,13 +36,20 @@ export function depthFirstSearch(
  */
 export function unlockServer(ns: NS, server: string) {
   if (server === "home") return;
-  [ns.brutessh, ns.ftpcrack, ns.relaysmtp, ns.sqlinject, ns.httpworm, ns.nuke].forEach(
-    (porthack) => {
-      try {
-        porthack(server);
-      } catch {}
+  [
+    ns.brutessh,
+    ns.ftpcrack,
+    ns.relaysmtp,
+    ns.sqlinject,
+    ns.httpworm,
+    ns.nuke,
+  ].forEach((porthack) => {
+    try {
+      porthack(server);
+    } catch {
+      // Intentionally do nothing
     }
-  );
+  });
 }
 
 /**
@@ -115,7 +122,11 @@ export function getServerMap<InfoType>(
   depthFirstSearch(ns, addToServerDumps);
 
   const recurse = (server: string) => {
-    const output = { hostname: server, ...infoFunc(server), children: {} } as ServerMapType;
+    const output = {
+      hostname: server,
+      ...infoFunc(server),
+      children: {},
+    } as ServerMapType;
 
     if (server in children) {
       children[server].forEach((child: string) => {

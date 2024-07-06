@@ -1,4 +1,4 @@
-import { AutocompleteData, NS, ScriptArg, Server } from "@ns";
+import { AutocompleteData, NS, Server } from "@ns";
 import { getWorkers } from "fs/usr/lib/servers";
 
 export async function main(ns: NS) {
@@ -68,6 +68,6 @@ export async function main(ns: NS) {
   }
 }
 
-export function autocomplete(data: AutocompleteData, args: ScriptArg[]) {
+export function autocomplete(data: AutocompleteData) {
   return data.servers;
 }
