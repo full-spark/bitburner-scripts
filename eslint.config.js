@@ -12,7 +12,8 @@ export default tseslint.config(
     ],
     rules: {
       "no-constant-condition": 0,
-      "no-control-regex": 0
+      "no-control-regex": 0,
+      "@typescript-eslint/no-explicit-any": 0,
     },
   }
 );

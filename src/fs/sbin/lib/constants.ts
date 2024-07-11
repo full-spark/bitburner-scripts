@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 import { readJsonFile, writeJsonFile } from "fs/sbin/lib/file";
 
 const CONSTANTS_FILE = "var/constants.json.txt";

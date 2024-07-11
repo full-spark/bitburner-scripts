@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 import { IndexableServer } from "/fs/lib/types/servers";
 
 /**

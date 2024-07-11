@@ -1,69 +1,66 @@
 import { AutocompleteData, NS, Server } from "@ns";
 import { getWorkers } from "fs/usr/lib/servers";
+import { getConstants } from "/fs/sbin/lib/constants";
+
+// RAM COST: 7.85GB
 
 export async function main(ns: NS) {
-  const target = ns.args[0] as string;
+  const targetName = ns.args[0] as string;
+  if (targetName === "home") {
+    ns.tprint(`Server '${targetName}' is your home server.`);
+    return;
+  }
 
+  const CONSTANTS = getConstants(ns);
   const workers = getWorkers(ns);
 
-  const ramCosts = {
-    weaken: ns.getScriptRam("fs/bin/weaken.js"),
-    grow: ns.getScriptRam("fs/bin/grow.js"),
-    hack: ns.getScriptRam("fs/bin/hack.js"),
-  };
-
   while (true) {
-    const serverInfo = ns.getServer(target) as Required<Server>;
+    const target = ns.getServer(targetName) as Required<Server>;
 
-    if (!serverInfo || serverInfo.hostname === "home") {
-      ns.tprint(`Server '${target}' not found or is your home server.`);
+    if (!target) {
+      ns.tprint(`Server '${target}' not found.`);
       return;
     }
 
-    const toWeaken = serverInfo.hackDifficulty > serverInfo.minDifficulty;
-    const toGrow = serverInfo.moneyAvailable < serverInfo.moneyMax;
+    const toWeaken = target.hackDifficulty > target.minDifficulty;
+    const toGrow = target.moneyAvailable < target.moneyMax;
 
-    console.log(
-      toWeaken,
-      toGrow,
-      serverInfo.hackDifficulty,
-      serverInfo.minDifficulty,
-      serverInfo.moneyAvailable,
-      serverInfo.moneyMax
-    );
+    async function applyAction(action: "HACK" | "GROW" | "WEAKEN") {
+      let file;
+      let wait;
 
-    if (toWeaken) {
+      switch (action) {
+        case "HACK":
+          file = CONSTANTS.binaryFiles.hack;
+          wait = ns.getHackTime(target!.hostname) + 1000;
+          break;
+        case "GROW":
+          file = CONSTANTS.binaryFiles.grow;
+          wait = ns.getGrowTime(target!.hostname) + 1000;
+          break;
+        case "WEAKEN":
+          file = CONSTANTS.binaryFiles.weaken;
+          wait = ns.getWeakenTime(target!.hostname) + 1000;
+          break;
+      }
+
       for (const worker of workers) {
-        ns.scp("fs/bin/weaken.js", worker.hostname);
-        const threads = Math.floor(worker.availableRam / ramCosts.weaken);
+        const threads = Math.floor(
+          worker.availableRam / CONSTANTS.binaryCosts.weaken
+        );
         if (threads > 0) {
-          ns.exec("fs/bin/weaken.js", worker.hostname, threads, target);
+          ns.exec(file, worker.hostname, threads, target!.hostname);
         }
       }
-    } else if (toGrow) {
-      for (const worker of workers) {
-        ns.scp("fs/bin/grow.js", worker.hostname);
-        const threads = Math.floor(worker.availableRam / ramCosts.grow);
-        if (threads > 0) {
-          ns.exec("fs/bin/grow.js", worker.hostname, threads, target);
-        }
-      }
-    } else {
-      for (const worker of workers) {
-        ns.scp("fs/bin/hack.js", worker.hostname);
-        const threads = Math.floor(worker.availableRam / ramCosts.hack);
-        if (threads > 0) {
-          ns.exec("fs/bin/hack.js", worker.hostname, threads, target);
-        }
-      }
+      await ns.sleep(wait);
     }
 
     if (toWeaken) {
-      await ns.sleep(ns.getWeakenTime(serverInfo.hostname) + 1000);
+      await applyAction("WEAKEN");
     } else if (toGrow) {
-      await ns.sleep(ns.getGrowTime(serverInfo.hostname) + 1000);
+      await applyAction("GROW");
     } else {
-      await ns.sleep(ns.getHackTime(serverInfo.hostname) + 1000);
+      await applyAction("HACK");
     }
   }
 }

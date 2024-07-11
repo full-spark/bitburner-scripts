@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 
 import { localeHHMMSS } from "/fs/lib/util/time";
 import {

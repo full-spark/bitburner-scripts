@@ -87,7 +87,7 @@ The game already exposes the `React` and `ReactDOM` objects globally, but in ord
 Support for jsx is also included, so if you use the `.tsx` file ending, you can do something like:
 
 ```ts
-import { NS } from '@ns';
+import type { NS } from '@ns';
 import React from '@react';
 
 interface IMyContentProps {

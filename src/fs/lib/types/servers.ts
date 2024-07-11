@@ -1,6 +1,6 @@
-import { Server, ScriptArg } from "@ns";
+import { Server } from "@ns";
 
-export type IndexableServer = Required<Server> & Record<string, ScriptArg>;
+export type IndexableServer = Required<Server> & Record<string, any>;
 
 export type WorkerServer = IndexableServer & {
   availableRam: number;
@@ -10,12 +10,7 @@ export type WorkerServer = IndexableServer & {
 export type TargetServer = IndexableServer & {
   analysis: {
     hasApi: boolean;
-    threads: {
-      weaken: Threads;
-      fluff: Threads;
-      naiveFarm: Threads;
-      formulaicFarm: Threads;
-    };
+    threads: Stages;
     // Only data we have access to with current. Data
     naive: AnalysisData;
     // Data we would have access to with Formulas API.
@@ -26,6 +21,9 @@ export type TargetServer = IndexableServer & {
 export type AnalysisData = {
   hackChance: number;
   weakenTime: number;
+  growTime: number;
+  hackTime: number;
+  score: number;
 };
 
 export type Threads = {
@@ -35,23 +33,14 @@ export type Threads = {
 };
 
 export type Stages = {
-  weaken: {
-    threads: Threads;
-    cost: number;
-  };
-  fluff: {
-    threads: Threads;
-    ratios: Threads;
-    cost: number;
-  };
-  farm: {
-    threads: Threads;
-    ratios: Threads;
-    cost: number;
-  };
-  formulaicFarm: {
-    threads: Threads;
-    ratios: Threads;
-    cost: number;
-  };
+  weaken: Stage;
+  fluff: Stage;
+  farm: Stage;
+  formulaicFarm: Stage;
+};
+
+export type Stage = {
+  threads: Threads;
+  ratios: Threads;
+  cost: number;
 };
