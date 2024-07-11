@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 
 export async function main(ns: NS) {
   // Just like "weaken", but loops forever.

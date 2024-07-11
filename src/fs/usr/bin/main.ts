@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 import { getTargets } from "fs/usr/lib/servers";
 
 /** @param {NS} ns */

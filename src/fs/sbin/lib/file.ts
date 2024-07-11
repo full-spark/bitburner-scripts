@@ -1,4 +1,4 @@
-import { NS } from "@ns";
+import type { NS } from "@ns";
 
 export function readJsonFile<T>(ns: NS, path: string): T | null {
   const contents = ns.read(path);
